@@ -8,14 +8,13 @@ before_script:
   - psql -U postgres -c "create user decide password 'decide'"
   - psql -U postgres -c "create database test_decide owner decide"
   - psql -U postgres -c "ALTER USER decide CREATEDB"
+  - psql -U postgres -c "DROP DATABASE \"test_decide\""
 language: python
 python:
   - "3.6"
 install:
   - pip install -r requirements.txt
-  - pip install codacy-coverage
 script:
   - cd decide
-  - coverage run --branch --source=. ./manage.py test mixnet --keepdb --with-xunit
-  - coverage xml
-  - python-codacy-coverage -r coverage.xml
+  - ./manage.py test mixnet
+if: branch = master
